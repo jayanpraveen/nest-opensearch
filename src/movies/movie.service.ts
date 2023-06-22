@@ -45,18 +45,8 @@ export class MovieService {
     }
 
     async searchAggMovie(body: any) {
-        const aggs = {
-            aggs: {
-                [body.agg_name]: {
-                    [body.type]: {
-                        field: body.field
-                    }
-                }
-            }
-        }
-
         if (this.opensearchService.doesIndexExists(OPENSEARCH_MOVIE_INDEX)) {
-            return await this.opensearchService.searchAggRecord(OPENSEARCH_MOVIE_INDEX, aggs)
+            return await this.opensearchService.searchAggRecord(OPENSEARCH_MOVIE_INDEX, body)
         }
         return;
     }

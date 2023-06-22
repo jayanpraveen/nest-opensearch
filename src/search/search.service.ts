@@ -62,39 +62,25 @@ export class OpensearchService {
         }
     }
 
-    async searchAggRecord(indexName: string, bodyx: any) {
+    async searchAggRecord(indexName: string, body: any) {
 
         const client: Client = this.opensearchClient
 
-        const s =
-        {
-            "aggs": {
-                "aswm_agg": {
-                    "filter": { "term": { "year": "1992" } },
-                    "aggs": {
-                        "avg_price": { "avg": { "field": "year" } }
+        // change const for aggregations accordingly 
+        const { body: { aggregations } } = await client.search({
+            index: indexName,
+            body:
+            {
+                "aggs": {
+                    [body.agg_name]: {
+                        "filter": { "term": { "year": "1992" } },
+                        "aggs": {
+                            "avg_price": { "avg": { "field": body.field } }
+                        }
                     }
                 }
             }
-        }
-
-        // change const for aggregations accordingly
-        const { body: { aggregations } } = await client.search({
-            index: indexName,
-            // id: body
-            body: s,
-            // q: `*${X}*`
         });
-
-        // return client.search({
-        //     index: indexName,
-        //     // id: body
-        //     body: s,
-        //     // q: `*${X}*`
-        // });
-
-
-        console.log(JSON.stringify(bodyx, null, 2));
 
         return aggregations;
 
