@@ -38,6 +38,8 @@ export class OpensearchService {
 
     async searchRecord(indexName: string, bodyx: any, X) {
         const client: Client = this.opensearchClient
+
+        // change const for aggregations accordingly
         const { body: { hits } } = await client.search({
             index: indexName,
             // id: body
@@ -58,7 +60,44 @@ export class OpensearchService {
             results,
             values
         }
-        // return data
+    }
+
+    async searchAggRecord(indexName: string, bodyx: any) {
+
+        const client: Client = this.opensearchClient
+
+        const s =
+        {
+            "aggs": {
+                "aswm_agg": {
+                    "filter": { "term": { "year": "1992" } },
+                    "aggs": {
+                        "avg_price": { "avg": { "field": "year" } }
+                    }
+                }
+            }
+        }
+
+        // change const for aggregations accordingly
+        const { body: { aggregations } } = await client.search({
+            index: indexName,
+            // id: body
+            body: s,
+            // q: `*${X}*`
+        });
+
+        // return client.search({
+        //     index: indexName,
+        //     // id: body
+        //     body: s,
+        //     // q: `*${X}*`
+        // });
+
+
+        console.log(JSON.stringify(bodyx, null, 2));
+
+        return aggregations;
+
     }
 
     async addSinlgeRecord(indexName: string, body: object) {

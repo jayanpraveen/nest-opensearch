@@ -25,7 +25,7 @@ export class MovieService {
         await this.opensearchService.updateRecord(OPENSEARCH_MOVIE_INDEX, id, movieDto)
     }
 
-    async getMovie(body: string) {
+    async searchMovie(body: string) {
         const query = {
             query: {
                 match: {
@@ -41,6 +41,23 @@ export class MovieService {
             return await this.opensearchService.searchRecord(OPENSEARCH_MOVIE_INDEX, query, body)
         }
 
+        return;
+    }
+
+    async searchAggMovie(body: any) {
+        const aggs = {
+            aggs: {
+                [body.agg_name]: {
+                    [body.type]: {
+                        field: body.field
+                    }
+                }
+            }
+        }
+
+        if (this.opensearchService.doesIndexExists(OPENSEARCH_MOVIE_INDEX)) {
+            return await this.opensearchService.searchAggRecord(OPENSEARCH_MOVIE_INDEX, aggs)
+        }
         return;
     }
 

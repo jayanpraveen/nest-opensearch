@@ -17,10 +17,17 @@ export class MovieController {
         return this.moviesService.updateMovie(id, opts);
     }
 
-    @Get("/get")
-    getMovie(@Body() opts: { text: string }) {
-        return this.moviesService.getMovie(opts.text);
+    @Get("/search")
+    searchMovie(@Body() opts: { text: string }) {
+        return this.moviesService.searchAggMovie(opts.text);
     }
+
+    @Get("/search/agg")
+    searchAggMovie(@Body() opts: { agg_name: string, type: string, field: string, }) {
+        console.log();
+        return this.moviesService.searchAggMovie(opts);
+    }
+
 
     @Delete("/delete")
     deleteMovie(@Body() opts: { id: string }) {
