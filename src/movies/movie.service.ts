@@ -24,7 +24,7 @@ export class MovieService {
     }
     async getSingleMoviesFromDB() {
         const s: Movie[] = await this.movieRespository.findAll()
-        return Movie[s.length - 1]
+        return s[s.length - 1]
     }
 
     async addMovie(movieDto: MovieDto) {

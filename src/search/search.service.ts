@@ -92,6 +92,8 @@ export class OpensearchService {
             index: indexName,
             body: body
         })
+        console.log("[SRES]: " + response.statusCode);
+
         return response.statusCode === 201
     }
 
