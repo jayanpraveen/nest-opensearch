@@ -6,6 +6,8 @@ import { SubscriberModule } from './subscriber/subscriber.module';
 @Module({
   imports: [MoviesModule, SearchModule, SubscriberModule],
   controllers: [],
-  providers: [],
+  providers: [
+
+  ],
 })
 export class AppModule { }

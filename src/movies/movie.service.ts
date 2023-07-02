@@ -4,6 +4,7 @@ import { MovieDto } from "./movie.dto";
 import { OpensearchService } from "src/search/search.service";
 import { QueueService } from "src/queue/queue.service";
 import { QueueEvents, QueueNames } from "src/queue/queue.enums";
+import { Request } from "express";
 
 const OPENSEARCH_MOVIE_INDEX = "movie_index"
 
@@ -25,6 +26,31 @@ export class MovieService {
     async getSingleMoviesFromDB() {
         const s: Movie[] = await this.movieRespository.findAll()
         return s[s.length - 1]
+    }
+
+    async searchAll(req: any) {
+        const userId = req.user.userId;
+        // const userId = 200
+        console.log(req.user);
+
+        // await this.opensearchService.searchAll(OPENSEARCH_MOVIE_INDEX, userId);
+
+        const query = {
+            query: {
+                match: {
+                    userId: {
+                        query: userId,
+                    }
+                }
+            }
+        }
+
+        if (this.opensearchService.doesIndexExists(OPENSEARCH_MOVIE_INDEX)) {
+            return await this.opensearchService.searchAll(OPENSEARCH_MOVIE_INDEX, query)
+        }
+
+        return;
+
     }
 
     async addMovie(movieDto: MovieDto) {
@@ -52,10 +78,8 @@ export class MovieService {
         const query = {
             query: {
                 match: {
-                    name: {
+                    userId: {
                         query: body,
-                        operator: "and",
-                        fuzziness: "auto"
                     }
                 }
             }

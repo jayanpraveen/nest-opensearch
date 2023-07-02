@@ -1,5 +1,7 @@
-import { Sequelize } from 'sequelize-typescript';;
+import { Sequelize } from 'sequelize-typescript'; import { UserSession } from 'src/auth/userSession.model';
+;
 import { Movie } from 'src/movies/movie.model';
+import { ProductUser } from 'src/user/model/productUser.model';
 
 export const databaseProviders = [
     {
@@ -21,7 +23,7 @@ export const databaseProviders = [
                     `)
                 }
             });
-            sequelize.addModels([Movie]);
+            sequelize.addModels([Movie, ProductUser, UserSession]);
             await sequelize.sync();
             return sequelize;
         },

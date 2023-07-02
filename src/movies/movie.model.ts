@@ -4,10 +4,10 @@ import { Column, Model, Table } from "sequelize-typescript"
 export class Movie extends Model {
 
     @Column
-    name: string
+    userId: number
 
     @Column
-    genre: string
+    name: string
 
     @Column
     year: number

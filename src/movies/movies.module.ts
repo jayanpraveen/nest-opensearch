@@ -6,17 +6,30 @@ import { moviesProviders } from './movie.provider';
 import { QueueModule } from 'src/queue/queue.module';
 import { OpensearchService } from 'src/search/search.service';
 import { SearchModule } from 'src/search/search.module';
+import { AuthModule } from 'src/auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from 'src/auth/auth.constants';
 
 @Module({
-    controllers: [MovieController],
+    controllers: [
+        MovieController,
+    ],
     imports: [
         DatabaseModule,
         forwardRef(() => SearchModule),
-        QueueModule
+        QueueModule,
+        AuthModule,
+        JwtModule.register({
+            global: true,
+            secret: jwtConstants.secret,
+            signOptions: { expiresIn: '5h' },
+        })
     ],
     providers: [
         MovieService, ...moviesProviders,
     ],
-    exports: [MovieService]
+    exports: [
+        MovieService,
+    ]
 })
 export class MoviesModule { }

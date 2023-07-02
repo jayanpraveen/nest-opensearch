@@ -8,6 +8,28 @@ export class OpensearchService {
         @Inject("opensearch") private readonly opensearchClient: Client
     ) { }
 
+    async searchAll(indexName: string, body: any) {
+        const client = this.opensearchClient
+
+        const { body: { hits } } = await client.search({
+            index: indexName,
+            body: body
+        });
+
+        const results = hits.total.value;
+        const values = hits.hits.map((hit) => {
+            return {
+                id: hit._id,
+                score: hit._score,
+                source: hit._source
+            }
+        });
+
+        return {
+            results,
+            values
+        }
+    }
 
     async doesIndexExists(indexName: string) {
         const client = this.opensearchClient
